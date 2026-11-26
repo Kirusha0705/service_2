@@ -1,7 +1,7 @@
 from datetime import date
 from uuid import UUID
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, model_validator, ConfigDict
 
 
 class MaintenanceCreate(BaseModel):
@@ -15,10 +15,12 @@ class MaintenanceCreate(BaseModel):
             raise ValueError('Date of last maintenance cannot be greater than next maintenance')
         return self
 
+    model_config = ConfigDict(from_attributes=True)
+
 class MaintenanceResponse(BaseModel):
     car_id: UUID
     last_date_maintenance: date
     next_date_maintenance: date
 
-
+    model_config = ConfigDict(from_attributes=True)
 

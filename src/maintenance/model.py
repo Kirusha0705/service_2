@@ -1,8 +1,8 @@
 from datetime import date
 from uuid import UUID, uuid4
 
-from sqlalchemy import CheckConstraint, Date
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import CheckConstraint, Date, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column, Composite
 
 from src.infrastructure.base_model import Base
 
@@ -22,4 +22,11 @@ class MaintenanceModel(Base):
         CheckConstraint(
             'next_date_maintenance > last_date_maintenance'
         ),
+        UniqueConstraint(
+            "car_id",
+            "last_date_maintenance",
+            "next_date_maintenance",
+            name="uq_car_data_last_and_next_maintenance",
+        ),
+
     )

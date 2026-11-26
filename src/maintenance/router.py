@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from fastapi.params import Path
 from starlette import status
 
-from src.dependencies import MaintenanceServiceReadDep
+from src.dependencies import MaintenanceServiceReadDep, MaintenanceServiceWriteDep
 from src.maintenance.schema import MaintenanceCreate, MaintenanceResponse
 
 router = APIRouter(prefix='/maintenance', tags=['Техническое обслуживание'])
@@ -15,11 +15,11 @@ async def read_maintenance(
         maintenance_service: MaintenanceServiceReadDep,
         car_id: UUID = Path(description='ID машины')
 ):
-    return maintenance_service.read_maintenance(car_id)
+    return await maintenance_service.read_maintenance(car_id)
 
 @router.post('/{car_id}', response_model=MaintenanceResponse, status_code=status.HTTP_201_CREATED)
 async def create_maintenance(
         maintenance_data: MaintenanceCreate,
-        maintenance_service: MaintenanceServiceReadDep,
+        maintenance_service: MaintenanceServiceWriteDep,
 ):
-    return maintenance_service.create_maintenance(maintenance_data)
+    return await maintenance_service.create_maintenance(maintenance_data)

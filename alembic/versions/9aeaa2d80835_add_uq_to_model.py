@@ -1,8 +1,8 @@
-"""create table
+"""add uq to model
 
-Revision ID: 0d6422fa9422
+Revision ID: 9aeaa2d80835
 Revises: 
-Create Date: 2026-11-25 15:40:02.907285
+Create Date: 2026-11-26 17:18:14.436733
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '0d6422fa9422'
+revision: str = '9aeaa2d80835'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -27,7 +27,8 @@ def upgrade() -> None:
     sa.Column('last_date_maintenance', sa.Date(), nullable=False),
     sa.Column('next_date_maintenance', sa.Date(), nullable=False),
     sa.CheckConstraint('next_date_maintenance > last_date_maintenance'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('car_id', 'last_date_maintenance', 'next_date_maintenance', name='uq_car_data_last_and_next_maintenance')
     )
     # ### end Alembic commands ###
 
